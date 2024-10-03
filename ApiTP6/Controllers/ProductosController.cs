@@ -104,7 +104,6 @@ namespace ApiTP6.Controllers
             productoDB.Imagen = productoDTO.Imagen;
             productoDB.Stock = productoDTO.Stock;
 
-            _context.Productos.Update(productoDB);
             await _context.SaveChangesAsync();
             return Ok("Producto modificado");
         }
