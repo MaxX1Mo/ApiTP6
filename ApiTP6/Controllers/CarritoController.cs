@@ -114,10 +114,8 @@ namespace ApiTP6.Controllers
             return Ok("Carrito Creado");
         }
 
-
-
+        #region Editar
         // EDITAR CARRITO IMPLICA EDITAR CARRITO Y LOS DETALLES CARRITOS
-        /*
         [HttpPut]
         [Route("editar")]
         public async Task<ActionResult<CarritoDTO>> Editar(CarritoDTO carritoDTO)
