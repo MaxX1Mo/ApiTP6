@@ -4,6 +4,7 @@ using ApiTP6.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiTP6.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003020935_FixEliminacionCascadaUsuarioPersona")]
+    partial class FixEliminacionCascadaUsuarioPersona
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,9 +100,6 @@ namespace ApiTP6.Migrations
 
                     b.HasKey("IDPersona");
 
-                    b.HasIndex("IDUsuario")
-                        .IsUnique();
-
                     b.ToTable("Personas");
                 });
 
@@ -167,6 +167,9 @@ namespace ApiTP6.Migrations
 
                     b.HasKey("IDUsuario");
 
+                    b.HasIndex("IDPersona")
+                        .IsUnique();
+
                     b.ToTable("Usuarios");
                 });
 
@@ -200,20 +203,26 @@ namespace ApiTP6.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("ApiTP6.Models.Persona", b =>
+            modelBuilder.Entity("ApiTP6.Models.Usuario", b =>
                 {
-                    b.HasOne("ApiTP6.Models.Usuario", "Usuario")
-                        .WithOne("Persona")
-                        .HasForeignKey("ApiTP6.Models.Persona", "IDUsuario")
+                    b.HasOne("ApiTP6.Models.Persona", "Persona")
+                        .WithOne("Usuario")
+                        .HasForeignKey("ApiTP6.Models.Usuario", "IDPersona")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuario");
+                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("ApiTP6.Models.Carrito", b =>
                 {
                     b.Navigation("DetallesCarritos");
+                });
+
+            modelBuilder.Entity("ApiTP6.Models.Persona", b =>
+                {
+                    b.Navigation("Usuario")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApiTP6.Models.Producto", b =>
@@ -224,9 +233,6 @@ namespace ApiTP6.Migrations
             modelBuilder.Entity("ApiTP6.Models.Usuario", b =>
                 {
                     b.Navigation("Carrito");
-
-                    b.Navigation("Persona")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

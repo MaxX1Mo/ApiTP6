@@ -106,17 +106,25 @@ namespace ApiTP6.Data
                 .HasForeignKey<Usuario>(u => u.IDPersona)
                 .OnDelete(DeleteBehavior.Cascade);  // eliminacion en cascada, cuando se elimna usuario se elimina persona por su relacion 1 a 1
 
+            // Persona Y Usuario (1:1)
+            modelBuilder.Entity<Persona>()
+                .HasOne(pe => pe.Usuario)
+                .WithOne(u => u.Persona)
+                .HasForeignKey<Persona>(u => u.IDUsuario);
+
             // Usuario y Carrito (1:N)
             modelBuilder.Entity<Usuario>()
                 .HasMany(u => u.Carrito)
                 .WithOne(c => c.Usuario)
                 .HasForeignKey(c => c.IDUsuario);
 
+
             // Carrito y DetallesCarrito (1:N)
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.DetallesCarritos)
                 .WithOne(dc => dc.Carrito)
-                .HasForeignKey(c => c.IDCarrito);
+                .HasForeignKey(c => c.IDCarrito)
+                .OnDelete(DeleteBehavior.Cascade); ;
 
             // Producto y DetallesCarrito (1:N)
             modelBuilder.Entity<Producto>()
