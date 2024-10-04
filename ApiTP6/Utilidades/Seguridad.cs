@@ -49,8 +49,6 @@ namespace ApiTP6.Utilidades
             new Claim(ClaimTypes.Role, usuario.Rol.ToString()) //Cuando genera el token, se agrega el rol del usuario como un "claim". Esto permite verificar el rol al autenticar al usuario.
             };
         
-
-
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 

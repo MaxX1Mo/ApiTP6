@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiTP6.DTOs;
 using ApiTP6.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiTP6.Controllers
 {
@@ -19,6 +20,7 @@ namespace ApiTP6.Controllers
 
         #region Listado
         [HttpGet]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("lista")]
         public async Task<ActionResult<List<CarritoDTO>>> Get()
         {
@@ -48,6 +50,7 @@ namespace ApiTP6.Controllers
 
         #region Buscar
         [HttpGet]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("buscar/{id}")]
         public async Task<ActionResult<CarritoDTO>> Get(int id)
         {
@@ -80,6 +83,7 @@ namespace ApiTP6.Controllers
 
         #region Crear
         [HttpPost]
+        [Authorize(Roles = "Admin,Usuario,Empleado")]
         [Route("crear")]
         public async Task<ActionResult<CarritoDTO>> Crear(CarritoDTO carritoDTO)
         {
@@ -124,6 +128,7 @@ namespace ApiTP6.Controllers
         #region Editar
         // EDITAR CARRITO IMPLICA EDITAR CARRITO Y LOS DETALLES CARRITOS
         [HttpPut]
+        [Authorize(Roles = "Admin,Usuario,Empleado")]
         [Route("editar/{id}")]
         public async Task<ActionResult<CarritoDTO>> Editar(int id, [FromBody] CarritoDTO carritoDTO)
         {
@@ -179,6 +184,7 @@ namespace ApiTP6.Controllers
         #region Eliminar
         //ELIMINAR CARRITO IMPLICA ELIMINAR CARRITO Y DETALLES CARRITO
         [HttpDelete]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("eliminar/{id}")]
         public async Task<ActionResult<CarritoDTO>> Eliminar(int id)
         {

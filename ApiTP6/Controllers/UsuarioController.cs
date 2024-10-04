@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ApiTP6.DTOs;
 using ApiTP6.Models;
 using ApiTP6.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiTP6.Controllers
 {
@@ -23,6 +24,7 @@ namespace ApiTP6.Controllers
 
         #region Listado
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("lista")]
         public async Task<ActionResult<List<UsuarioDTO>>> Get()
         {
@@ -51,6 +53,7 @@ namespace ApiTP6.Controllers
 
         #region Buscar
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("buscar/{id}")]
         public async Task<ActionResult<UsuarioDTO>> Get(int id)
         {
@@ -78,6 +81,7 @@ namespace ApiTP6.Controllers
 
         #region CREAR
         [HttpPost]
+        [AllowAnonymous]
         [Route("crear")]
         public async Task<ActionResult<UsuarioDTO>> Crear(UsuarioDTO usuarioDTO)
         {
@@ -105,6 +109,7 @@ namespace ApiTP6.Controllers
 
         #region EDITAR
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         [Route("editar/{id}")]
         public async Task<ActionResult<UsuarioDTO>> Editar(int id,UsuarioDTO usuarioDTO)
         {
@@ -145,6 +150,7 @@ namespace ApiTP6.Controllers
 
         #region Eliminar
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         [Route("eliminar/{id}")]
         public async Task<ActionResult<UsuarioDTO>> Eliminar(int id)
         {
