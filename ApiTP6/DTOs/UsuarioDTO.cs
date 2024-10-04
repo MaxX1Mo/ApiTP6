@@ -10,5 +10,7 @@
         public string? Nombre { get; set;}
         public string? Apellido { get; set; }
         public string? NroCelular { get; set; }
+        public Roles Rol { get; set; }
+
     }
 }

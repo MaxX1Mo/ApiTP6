@@ -17,6 +17,7 @@ namespace ApiTP6.Controllers
             _context = context;
         }
 
+        #region Listado
         [HttpGet]
         [Route("lista")]
         public async Task<ActionResult<List<CarritoDTO>>> Get()
@@ -34,6 +35,7 @@ namespace ApiTP6.Controllers
                 IDUsuario = carrito.Usuario.IDUsuario,
                 Productos = carrito.DetallesCarritos.Select(c => new DetallesCarritoDTO
                 {
+                    IDDetallesCarrito = c.IDDetallesCarrito,
                     IDProducto = c.IDProducto,
                     Cantidad = c.Cantidad
                 }).ToList()
@@ -41,8 +43,10 @@ namespace ApiTP6.Controllers
 
             return Ok(carritosDTO);
         }
+        #endregion
 
 
+        #region Buscar
         [HttpGet]
         [Route("buscar/{id}")]
         public async Task<ActionResult<CarritoDTO>> Get(int id)
@@ -64,6 +68,7 @@ namespace ApiTP6.Controllers
             carritoDTO.IDUsuario = carritoDB.Usuario.IDUsuario;
             carritoDTO.Productos = carritoDB.DetallesCarritos.Select(c => new DetallesCarritoDTO
             {
+                IDDetallesCarrito = c.IDDetallesCarrito,
                 IDProducto = c.IDProducto,
                 Cantidad = c.Cantidad,
             }).ToList();
@@ -71,8 +76,9 @@ namespace ApiTP6.Controllers
 
             return Ok(carritoDTO);
         }
+        #endregion
 
-
+        #region Crear
         [HttpPost]
         [Route("crear")]
         public async Task<ActionResult<CarritoDTO>> Crear(CarritoDTO carritoDTO)
@@ -113,29 +119,64 @@ namespace ApiTP6.Controllers
             await _context.SaveChangesAsync();
             return Ok("Carrito Creado");
         }
+        #endregion
 
-
-
+        #region Editar
         // EDITAR CARRITO IMPLICA EDITAR CARRITO Y LOS DETALLES CARRITOS
-        /*
         [HttpPut]
-        [Route("editar")]
-        public async Task<ActionResult<CarritoDTO>> Editar(CarritoDTO carritoDTO)
+        [Route("editar/{id}")]
+        public async Task<ActionResult<CarritoDTO>> Editar(int id, [FromBody] CarritoDTO carritoDTO)
         {
-            var productoDB = await _context.Productos
-                .Where(p => p.IDProducto == productoDTO.IDProducto).FirstOrDefaultAsync();
+            var carritoDB = await _context.Carritos.Include(c => c.Usuario)
+                .Include(c => c.DetallesCarritos)
+                .ThenInclude(dc => dc.Producto)
+                .Where(c => c.IDCarrito == id)
+                .FirstOrDefaultAsync();
 
-            productoDB.NombreProducto = productoDTO.NombreProducto;
-            productoDB.Descripcion = productoDTO.Descripcion;
-            productoDB.Precio = productoDTO.Precio;
-            productoDB.Imagen = productoDTO.Imagen;
-            productoDB.Stock = productoDTO.Stock;
+            if (carritoDB == null)
+            {
+                return NotFound("Carrito no encontrado.");
+            }
 
-            _context.Productos.Update(productoDB);
-            await _context.SaveChangesAsync();
-            return Ok("Producto modificado");
+            carritoDB.Fecha = carritoDTO.Fecha;
+            carritoDB.IDUsuario = carritoDTO.IDUsuario;
+
+            // Actualizar los detalles del carrito
+            foreach (var detalleDTO in carritoDTO.Productos)
+            {
+                var detalleDB = carritoDB.DetallesCarritos
+                    .FirstOrDefault(d => d.IDDetallesCarrito == detalleDTO.IDDetallesCarrito);
+
+                if (detalleDB != null)
+                {
+                    // Actualizar detalle existente
+                    detalleDB.Cantidad = detalleDTO.Cantidad;
+                    detalleDB.IDProducto = detalleDTO.IDProducto;
+                } 
+                else
+                {
+                    // Agregar nuevo detalle si no existe
+                    carritoDB.DetallesCarritos.Add(new DetallesCarrito
+                    {
+                        IDProducto = detalleDTO.IDProducto,
+                        Cantidad = detalleDTO.Cantidad,
+                        IDCarrito = carritoDTO.IDCarrito
+                    });
+                }
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok("Carrito actualizado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al actualizar los datos: {ex.Message}");
+            }
         }
+        #endregion
 
+        #region Eliminar
         //ELIMINAR CARRITO IMPLICA ELIMINAR CARRITO Y DETALLES CARRITO
         [HttpDelete]
         [Route("eliminar/{id}")]
@@ -145,16 +186,16 @@ namespace ApiTP6.Controllers
 
             if (carritoDB is null)
             {
-                return NotFound("Producto no encontrado");
+                return NotFound("Carrito no encontrado");
             }
 
             _context.Carritos.Remove(carritoDB);
 
             await _context.SaveChangesAsync();
 
-            return Ok("Producto eliminado");
+            return Ok("Carrito eliminado");
         }
-        /*
+        #endregion
 
     }
 }

@@ -17,6 +17,7 @@ namespace ApiTP6.Controllers
             _context = context;
         }
 
+        #region Listado
         [HttpGet]
         [Route("lista")]
         public async Task<ActionResult<List<ProductoDTO>>> Get()
@@ -40,7 +41,9 @@ namespace ApiTP6.Controllers
             }
             return Ok(listaDTO);
         }
+        #endregion
 
+        #region Buscar
         [HttpGet]
         [Route("buscar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Get(int id)
@@ -60,7 +63,9 @@ namespace ApiTP6.Controllers
 
             return Ok(productoDTO);
         }
+        #endregion
 
+        #region Crear
         [HttpPost]
         [Route("crear")]
         public async Task<ActionResult<ProductoDTO>> Crear(ProductoDTO productoDTO)
@@ -77,13 +82,21 @@ namespace ApiTP6.Controllers
             await _context.SaveChangesAsync();
             return Ok("Producto Creado");
         }
+        #endregion
 
+        #region Editar
         [HttpPut]
-        [Route("editar")]
-        public async Task<ActionResult<ProductoDTO>> Editar(ProductoDTO productoDTO)
+        [Route("editar/{id}")]
+        public async Task<ActionResult<ProductoDTO>> Editar(int id, ProductoDTO productoDTO)
         {
             var productoDB = await _context.Productos
-                .Where(p => p.IDProducto == productoDTO.IDProducto).FirstOrDefaultAsync();
+                .Where(p => p.IDProducto == id).FirstOrDefaultAsync();
+
+            if (productoDB == null)
+            {
+                return NotFound("Producto no encontrado.");
+            }
+
 
             productoDB.NombreProducto = productoDTO.NombreProducto;
             productoDB.Descripcion = productoDTO.Descripcion;
@@ -91,11 +104,12 @@ namespace ApiTP6.Controllers
             productoDB.Imagen = productoDTO.Imagen;
             productoDB.Stock = productoDTO.Stock;
 
-            _context.Productos.Update(productoDB);
             await _context.SaveChangesAsync();
             return Ok("Producto modificado");
         }
+        #endregion
 
+        #region Eliminar
         [HttpDelete]
         [Route("eliminar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Eliminar(int id)
@@ -113,6 +127,7 @@ namespace ApiTP6.Controllers
     
             return Ok("Producto eliminado");
         }
+        #endregion
 
     }
 }
