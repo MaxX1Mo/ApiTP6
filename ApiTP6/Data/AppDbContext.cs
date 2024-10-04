@@ -55,7 +55,7 @@ namespace ApiTP6.Data
                 .IsRequired();
 
                  tb.Property(u => u.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(255)
                 .IsRequired();
                 
             });
@@ -103,14 +103,14 @@ namespace ApiTP6.Data
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Persona)
                 .WithOne(pe => pe.Usuario)
-                .HasForeignKey<Usuario>(u => u.IDPersona)
+                .HasForeignKey<Persona>(u => u.IDUsuario)
                 .OnDelete(DeleteBehavior.Cascade);  // eliminacion en cascada, cuando se elimna usuario se elimina persona por su relacion 1 a 1
 
-            // Persona Y Usuario (1:1)
-            modelBuilder.Entity<Persona>()
-                .HasOne(pe => pe.Usuario)
-                .WithOne(u => u.Persona)
-                .HasForeignKey<Persona>(u => u.IDUsuario);
+            //// Persona Y Usuario (1:1)
+            //modelBuilder.Entity<Persona>()
+            //    .HasOne(pe => pe.Usuario)
+            //    .WithOne(u => u.Persona)
+            //    .HasForeignKey<Persona>(u => u.IDUsuario);
 
             // Usuario y Carrito (1:N)
             modelBuilder.Entity<Usuario>()

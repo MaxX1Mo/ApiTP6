@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiTP6.DTOs;
 using ApiTP6.Models;
+using ApiTP6.Utilidades;
 
 namespace ApiTP6.Controllers
 {
@@ -12,9 +13,12 @@ namespace ApiTP6.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public UsuarioController(AppDbContext context)
+        private readonly Seguridad _seguridad;
+
+        public UsuarioController(AppDbContext context, Seguridad seguridad)
         {
             _context = context;
+            _seguridad = seguridad;
         }
 
         #region Listado
@@ -33,8 +37,9 @@ namespace ApiTP6.Controllers
                     IDUsuario = item.IDUsuario,
                     Email = item.Email,
                     Username = item.Username,
+                    Rol = item.Rol,
                     //Password = item.Password,
-                    IDPersona = item.IDPersona,
+                    IDPersona = item.Persona.IDPersona,
                     Nombre= item.Persona.Nombre,
                     Apellido = item.Persona.Apellido,
                     NroCelular = item.Persona.NroCelular,
@@ -60,8 +65,9 @@ namespace ApiTP6.Controllers
             usuarioDTO.IDUsuario = id;
             usuarioDTO.Email = usuarioDB.Email;
             usuarioDTO.Username = usuarioDB.Username;
+            usuarioDTO.Rol = usuarioDB.Rol;
             //usuarioDTO.Password = usuarioDB.Password;
-            usuarioDTO.IDPersona = usuarioDB.IDPersona;
+            usuarioDTO.IDPersona = usuarioDB.Persona.IDPersona;
             usuarioDTO.Nombre = usuarioDB.Persona.Nombre;
             usuarioDTO.Apellido = usuarioDB.Persona.Apellido;
             usuarioDTO.NroCelular = usuarioDB.Persona.NroCelular;
@@ -86,8 +92,9 @@ namespace ApiTP6.Controllers
             {
                 Email = usuarioDTO.Email,
                 Username = usuarioDTO.Username,
-                Password = usuarioDTO.Password,
-                Persona = personaDB,
+                Password = _seguridad.encriptarSHA256(usuarioDTO.Password),
+                Rol = usuarioDTO.Rol,
+                Persona = personaDB
             };
 
             await _context.Usuarios.AddAsync(usuarioDB);
@@ -113,8 +120,8 @@ namespace ApiTP6.Controllers
 
             usuariodb.Email = usuarioDTO.Email;
             usuariodb.Username = usuarioDTO.Username;
-            usuariodb.Password = usuarioDTO.Password;  // realizar un proceso de hashing a futuro para el password
-
+            usuariodb.Password = _seguridad.encriptarSHA256(usuarioDTO.Password);
+            usuariodb.Rol = usuarioDTO.Rol;
 
             if (usuariodb.Persona != null)
             {
