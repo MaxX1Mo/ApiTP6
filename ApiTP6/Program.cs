@@ -41,7 +41,6 @@ builder.Services.AddAuthentication(options =>
         (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]!))
     };
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("NewPolicy", app =>
@@ -59,7 +58,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("NewPolicy");
 
 app.UseAuthentication();
 
