@@ -10,10 +10,13 @@ using System.Security.Cryptography;
 using System.Text;
 using ApiTP6.DTOs;
 using ApiTP6.Utilidades;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiTP6.Controllers
 {
+
     [Route("api/[controller]")]
+    [AllowAnonymous]//permite a todos
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -27,7 +30,7 @@ namespace ApiTP6.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("acceso")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var usuario = await _context.Usuarios

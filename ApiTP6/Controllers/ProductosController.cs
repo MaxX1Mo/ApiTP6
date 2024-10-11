@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiTP6.DTOs;
 using ApiTP6.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiTP6.Controllers
 {
@@ -19,6 +20,7 @@ namespace ApiTP6.Controllers
 
         #region Listado
         [HttpGet]
+        [Authorize(Roles = "Admin,Usuario,Empleado")]
         [Route("lista")]
         public async Task<ActionResult<List<ProductoDTO>>> Get()
         {
@@ -45,6 +47,7 @@ namespace ApiTP6.Controllers
 
         #region Buscar
         [HttpGet]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("buscar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Get(int id)
         {
@@ -67,6 +70,7 @@ namespace ApiTP6.Controllers
 
         #region Crear
         [HttpPost]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("crear")]
         public async Task<ActionResult<ProductoDTO>> Crear(ProductoDTO productoDTO)
         {
@@ -86,6 +90,7 @@ namespace ApiTP6.Controllers
 
         #region Editar
         [HttpPut]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("editar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Editar(int id, ProductoDTO productoDTO)
         {
@@ -111,6 +116,7 @@ namespace ApiTP6.Controllers
 
         #region Eliminar
         [HttpDelete]
+        [Authorize(Roles = "Admin,Empleado")]
         [Route("eliminar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Eliminar(int id)
         {
