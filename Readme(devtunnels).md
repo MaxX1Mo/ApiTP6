@@ -6,8 +6,8 @@ La configuracion que necesite fue crear un tunel desde visual studio, ponerlo pu
 
 En las salidas del proyecto de la api, busque el tipo de salida dev tunnel y busque y copie la url que me genero: 
 
-===>    Salida
 
+        Salida
         Mostrar salida de: Dev Tunnel
         Se configuraron correctamente las siguientes direcciones URL en el túnel de desarrollo "TunelApi": 
              http://localhost:5280  -> https://9s77np9h-5280.brs.devtunnels.ms/ 
