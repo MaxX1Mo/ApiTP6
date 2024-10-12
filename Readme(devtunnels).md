@@ -13,4 +13,4 @@ En las salidas del proyecto de la api, busque el tipo de salida dev tunnel y bus
              http://localhost:5280  -> https://9s77np9h-5280.brs.devtunnels.ms/ 
                                               esta es la url que necesito
 
-Entonces me quedaria para el endpoint login por ejemplo  https://fvgzx1gd-5280.brs.devtunnels.ms/api/Login/acceso
+Entonces me quedaria para el endpoint login por ejemplo  https://9s77np9h-5280.brs.devtunnels.ms/api/Login/acceso
