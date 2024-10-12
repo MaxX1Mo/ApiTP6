@@ -121,7 +121,7 @@ namespace ApiTP6.Controllers
             
             await _context.Carritos.AddAsync(carritoDB);
             await _context.SaveChangesAsync();
-            return Ok("Carrito Creado");
+            return Ok(carritoDTO.IDCarrito);
         }
         #endregion
 
