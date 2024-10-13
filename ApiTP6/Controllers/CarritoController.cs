@@ -50,7 +50,7 @@ namespace ApiTP6.Controllers
 
         #region Buscar
         [HttpGet]
-        [Authorize(Roles = "Admin,Empleado")]
+        [Authorize(Roles = "Admin,Empleado,Usuario")]
         [Route("buscar/{id}")]
         public async Task<ActionResult<CarritoDTO>> Get(int id)
         {
@@ -121,7 +121,7 @@ namespace ApiTP6.Controllers
             
             await _context.Carritos.AddAsync(carritoDB);
             await _context.SaveChangesAsync();
-            return Ok("Carrito Creado");
+            return Ok(carritoDTO.IDCarrito);
         }
         #endregion
 

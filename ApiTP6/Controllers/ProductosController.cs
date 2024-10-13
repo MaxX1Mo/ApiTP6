@@ -47,7 +47,7 @@ namespace ApiTP6.Controllers
 
         #region Buscar
         [HttpGet]
-        [Authorize(Roles = "Admin,Empleado")]
+        [Authorize(Roles = "Admin,Empleado,Usuario")]
         [Route("buscar/{id}")]
         public async Task<ActionResult<ProductoDTO>> Get(int id)
         {
