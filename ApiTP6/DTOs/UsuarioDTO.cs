@@ -11,6 +11,5 @@
         public string? Apellido { get; set; }
         public string? NroCelular { get; set; }
         public Roles Rol { get; set; }
-        public Roles RolDefault { get; set; }
-    }
+        }
 }
