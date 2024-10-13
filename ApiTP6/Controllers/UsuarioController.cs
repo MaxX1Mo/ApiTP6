@@ -105,6 +105,33 @@ namespace ApiTP6.Controllers
             await _context.SaveChangesAsync();
             return Ok("Usuario Creado");
         }
+
+        #endregion
+        #region CREAR para registro usuario
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("registro")]
+        public async Task<ActionResult<UsuarioDTO>> Registro(UsuarioDTO usuarioDTO)
+        {            
+            var personaDB = new Persona
+            {
+                Nombre = usuarioDTO.Nombre,
+                Apellido = usuarioDTO.Apellido,
+                NroCelular = usuarioDTO.NroCelular
+            };
+            var usuarioDB = new Usuario
+            {
+                Email = usuarioDTO.Email,
+                Username = usuarioDTO.Username,
+                Password = _seguridad.encriptarSHA256(usuarioDTO.Password),
+                Rol = Roles.Usuario,
+                Persona = personaDB
+            };
+
+            await _context.Usuarios.AddAsync(usuarioDB);
+            await _context.SaveChangesAsync();
+            return Ok("Usuario Creado");
+        }
         #endregion
 
         #region EDITAR
