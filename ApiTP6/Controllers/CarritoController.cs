@@ -94,7 +94,8 @@ namespace ApiTP6.Controllers
             }
             var carritoDB = new Carrito
             {
-                Fecha = carritoDTO.Fecha,
+                //Fecha = carritoDTO.Fecha,
+                Fecha = DateTime.Now,
                 IDUsuario = carritoDTO.IDUsuario,
                 DetallesCarritos = new List<DetallesCarrito>()
             };
@@ -121,7 +122,7 @@ namespace ApiTP6.Controllers
             
             await _context.Carritos.AddAsync(carritoDB);
             await _context.SaveChangesAsync();
-            return Ok(carritoDTO.IDCarrito);
+            return Ok("Carrito Creado exitosamente");
         }
         #endregion
 
@@ -143,7 +144,7 @@ namespace ApiTP6.Controllers
                 return NotFound("Carrito no encontrado.");
             }
 
-            carritoDB.Fecha = carritoDTO.Fecha;
+            carritoDB.Fecha = DateTime.Now;
             carritoDB.IDUsuario = carritoDTO.IDUsuario;
 
             // Actualizar los detalles del carrito
