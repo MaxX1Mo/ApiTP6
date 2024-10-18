@@ -137,7 +137,7 @@ namespace ApiTP6.Controllers
         #region EDITAR
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        [Route("editar/")]
+        [Route("editar/{id}")]
         public async Task<ActionResult<UsuarioDTO>> Editar(int id,UsuarioDTO usuarioDTO)
         {
             var usuariodb = await _context.Usuarios
